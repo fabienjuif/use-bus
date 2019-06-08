@@ -1,5 +1,7 @@
 # use-bus
-React hook to subscribe and dispatch events accros React components
+> React hook to subscribe and dispatch events accros React components
+
+![npm](https://img.shields.io/npm/v/use-bus.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/use-bus.svg)
 
 # API
 ## dispatch
