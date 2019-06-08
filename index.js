@@ -34,14 +34,14 @@ export const dispatch = (action) => {
   })
 }
 
-const useBus = (type, callback) => {
+const useBus = (type, callback, deps = []) => {
   useEffect(() => {
     subscribe(type, callback)
 
     return () => {
       unsubscribe(type, callback)
     }
-  })
+  }, deps)
 
   return dispatch
 }

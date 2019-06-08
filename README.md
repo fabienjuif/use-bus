@@ -11,8 +11,9 @@
 
 ## useBus
 `import useBus from 'use-bus'`:
-- `useBus('string', callback)`: register the given `callback` to the `string` action (action.type equals `string`)
-  * `callback` take the action as the first argument so you can retrieve its type and its payload for example
+- `useBus('string', callback, deps)`: register the given `callback` to the `string` action (action.type equals `string`)
+  * `callback`: take the action as the first argument so you can retrieve its type and its payload for example
+  * `deps`: is an array where you declare variables you use in `callback`, like you are doing for a useEffect from React
 
 # Example
 ## register to an event (and react to it)
@@ -23,7 +24,11 @@ import useBus from 'use-bus'
 const PrintIterations = () => {
   const [iterations, setIterations] = useState(0)
 
-  useBus('@@ui/ADD_ITERATION', () => setIterations(old => old + 1))
+  useBus(
+    '@@ui/ADD_ITERATION',
+    () => setIterations(iterations + 1),
+    [iterations],
+  )
 
   return (
     <div>
