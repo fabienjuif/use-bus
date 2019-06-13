@@ -4,6 +4,6 @@ declare module "use-bus" {
     [key: string]: any;
   }
   export function dispatch(name: string): void;
-  export function dispatch(payload: EventAction): void;
-  export default function useBus(name: string, callback: (payload: EventAction) => void, deps: any[]): typeof dispatch;
+  export function dispatch(event: EventAction): void;
+  export default function useBus(name: string, callback: (event: EventAction) => void, deps: any[]): typeof dispatch;
 }
