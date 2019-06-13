@@ -5,5 +5,9 @@
   "module": "index.js",
   "repository": "git@github.com:fabienjuif/use-bus.git",
   "author": "Fabien JUIF <fabien.juif@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "types": "index.d.ts",
+  "peerDependencies": {
+    "react": "^16.8"
+  }
 }
