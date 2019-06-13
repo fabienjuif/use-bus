@@ -7,7 +7,7 @@
   "author": "Fabien JUIF <fabien.juif@gmail.com>",
   "license": "MIT",
   "types": "index.d.ts",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.8"
   }
 }
