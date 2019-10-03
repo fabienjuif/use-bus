@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - cache-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+            - ~/.cache/yarn
+          key: cache-{{ checksum "yarn.lock" }}
+      - run: yarn lint
+      - run: yarn jest --coverage && cat ./coverage/lcov.info | yarn coveralls
