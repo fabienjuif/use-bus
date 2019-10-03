@@ -12,7 +12,10 @@
 
 ## useBus
 `import useBus from 'use-bus'`:
-- `useBus('string', callback, deps)`: register the given `callback` to the `string` action (action.type equals `string`)
+- `useBus(filter, callback, deps)`: register the given `callback` to the given `filter`
+  * `filter`: it can be a string or a function
+    - `string`: if filter is a string, then the action type is test over this given string, **if the filter match the type, the callback is called**
+    - `function`: **the callback is called if the function returns a truthy value**
   * `callback`: take the action as the first argument so you can retrieve its type and its payload for example
   * `deps`: is an array where you declare variables you use in `callback`, like you are doing for a useEffect from React
 

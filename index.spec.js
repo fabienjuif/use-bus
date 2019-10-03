@@ -59,3 +59,33 @@ it('should not trigger the callback after unmount', (done) => {
   dispatch('EVENT_TYPE')
   setTimeout(done, 500)
 })
+
+it('should register a function and call the callback', (done) => {
+  let catchTimes = 0
+
+  const { unmount } = renderHook(() => useBus((event) => event.channel === 'ui' && event.type === 'EVENT_TYPE', (event) => {
+    catchTimes += 1
+    expect(event).toEqual({
+      channel: 'ui',
+      type: 'EVENT_TYPE',
+      payload: 'some payload',
+    })
+  }))
+
+  const { unmount: otherUnmount } = renderHook(() => useBus((event) => event.channel === 'sw' && event.type === 'EVENT_TYPE', () => {
+    catchTimes += 1
+  }))
+
+  dispatch({
+    channel: 'ui',
+    type: 'EVENT_TYPE',
+    payload: 'some payload',
+  })
+
+  unmount()
+  otherUnmount()
+
+  expect(catchTimes).toEqual(1)
+
+  done()
+})

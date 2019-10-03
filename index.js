@@ -1,47 +1,39 @@
 import { useEffect } from 'react'
 
-const subscribers = new Map()
+let subscribers = []
 
-const subscribe = (type, callback) => {
-  if (type === undefined || type === null) return
-  if (callback === undefined || callback === null) return
+const subscribe = (filter, callback) => {
+  if (filter === undefined || filter === null) return undefined
+  if (callback === undefined || callback === null) return undefined
 
-  if (!subscribers.has(type)) subscribers.set(type, new Set())
-  subscribers.get(type).add(callback)
+  subscribers = [
+    ...subscribers,
+    [filter, callback],
+  ]
+
+  return () => {
+    subscribers = subscribers.filter((subscriber) => subscriber[1] !== callback)
+  }
 }
 
-const unsubscribe = (type, callback) => {
-  if (!subscribers.has(type)) return
-  if (callback === undefined || callback === null) return
+export const dispatch = (event) => {
+  let { type } = event
+  if (typeof event === 'string') type = event
 
-  subscribers.get(type).delete(callback)
+  const args = []
+  if (typeof event === 'string') args.push({ type })
+  else args.push(event)
 
-  if (subscribers.get(type).size === 0) subscribers.delete(type)
-}
+  subscribers.forEach(([filter, callback]) => {
+    if (typeof filter === 'string' && filter !== type) return
+    if (typeof filter === 'function' && !filter(...args)) return
 
-export const dispatch = (action) => {
-  let { type } = action
-  if (typeof action === 'string') type = action
-
-  if (!subscribers.has(type)) return
-
-  subscribers.get(type).forEach((callback) => {
-    if (typeof action === 'string') {
-      callback({ type })
-    } else {
-      callback(action)
-    }
+    callback(...args)
   })
 }
 
 const useBus = (type, callback, deps = []) => {
-  useEffect(() => {
-    subscribe(type, callback)
-
-    return () => {
-      unsubscribe(type, callback)
-    }
-  }, deps)
+  useEffect(() => subscribe(type, callback), deps)
 
   return dispatch
 }
