@@ -1,13 +1,30 @@
 {
   "name": "use-bus",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "main": "index.js",
   "module": "index.js",
   "repository": "git@github.com:fabienjuif/use-bus.git",
+  "keywords": [
+    "react",
+    "hook",
+    "bus",
+    "eventbus",
+    "dispatch",
+    "share",
+    "actions",
+    "events",
+    "event",
+    "message",
+    "messages",
+    "nantes"
+  ],
   "author": "Fabien JUIF <fabien.juif@gmail.com>",
   "license": "MIT",
-  "types": "index.d.ts",
+  "types": "src/index.d.ts",
   "scripts": {
+    "build": "pika build",
+    "pika-publish": "pika publish",
+    "version": "npm run build",
     "lint": "eslint . --cache",
     "test": "jest"
   },
@@ -15,8 +32,13 @@
     "react": "^16.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "@pika/pack": "^0.5.0",
+    "@pika/plugin-build-node": "^0.9.2",
+    "@pika/plugin-build-web": "^0.9.2",
+    "@pika/plugin-standard-pkg": "^0.9.2",
     "@testing-library/react-hooks": "^2.0.1",
     "babel-jest": "^24.9.0",
     "coveralls": "^3.0.6",
@@ -30,11 +52,6 @@
     "react": "^16.10.1",
     "react-test-renderer": "^16.10.1"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
-  },
   "eslintConfig": {
     "extends": "airbnb",
     "rules": {
@@ -43,5 +60,26 @@
         "never"
       ]
     }
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ],
+      [
+        "@pika/plugin-standard-pkg"
+      ]
+    ]
   }
 }
