@@ -43,8 +43,8 @@
     "@testing-library/react-hooks": "^3.3.0",
     "babel-jest": "^26.0.1",
     "coveralls": "^3.1.1",
-    "eslint": "^7.2.0",
-    "eslint-config-airbnb": "^18.1.0",
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
@@ -55,6 +55,7 @@
   },
   "eslintConfig": {
     "extends": "airbnb",
+    "ignorePatterns": "pkg/",
     "rules": {
       "semi": [
         "error",
