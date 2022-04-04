@@ -89,3 +89,91 @@ it('should register a function and call the callback', (done) => {
 
   done()
 })
+
+it('should register an array and call the callback', (done) => {
+  let hitCount = 0
+  let missCount = 0
+
+  const { unmount: unmountHit } = renderHook(() => useBus(['foo', 'bar'], (event) => {
+    hitCount += 1
+    expect(event).toEqual({
+      channel: 'ui',
+      type: expect.stringMatching(/^(foo|bar)$/),
+      payload: 'some payload',
+    })
+  }))
+
+  const { unmount: unmountMiss } = renderHook(() => useBus(['baz'], () => {
+    missCount += 1
+  }))
+
+  dispatch({
+    channel: 'ui',
+    type: 'foo',
+    payload: 'some payload',
+  })
+
+  dispatch({
+    channel: 'ui',
+    type: 'bar',
+    payload: 'some payload',
+  })
+
+  dispatch({
+    channel: 'ui',
+    type: 'baz',
+    payload: 'some payload',
+  })
+
+  unmountHit()
+  unmountMiss()
+
+  expect(hitCount).toEqual(2)
+  expect(missCount).toEqual(1)
+
+  done()
+})
+
+it('should register a RegExp and call the callback', (done) => {
+  let hitCount = 0
+  let missCount = 0
+
+  const { unmount: unmountHit } = renderHook(() => useBus(/^b/, (event) => {
+    hitCount += 1
+    expect(event).toEqual({
+      channel: 'ui',
+      type: expect.stringMatching(/^(bar|baz)$/),
+      payload: 'some payload',
+    })
+  }))
+
+  const { unmount: unmountMiss } = renderHook(() => useBus(/^f/, () => {
+    missCount += 1
+  }))
+
+  dispatch({
+    channel: 'ui',
+    type: 'foo',
+    payload: 'some payload',
+  })
+
+  dispatch({
+    channel: 'ui',
+    type: 'bar',
+    payload: 'some payload',
+  })
+
+  dispatch({
+    channel: 'ui',
+    type: 'baz',
+    payload: 'some payload',
+  })
+
+  unmountHit()
+  unmountMiss()
+
+  expect(hitCount).toEqual(2)
+  expect(missCount).toEqual(1)
+
+  done()
+})
