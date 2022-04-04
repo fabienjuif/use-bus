@@ -26,6 +26,8 @@ export const dispatch = (event) => {
 
   subscribers.forEach(([filter, callback]) => {
     if (typeof filter === 'string' && filter !== type) return
+    if (Array.isArray(filter) && !filter.includes(type)) return
+    if (filter instanceof RegExp && !filter.test(type)) return
     if (typeof filter === 'function' && !filter(...args)) return
 
     callback(...args)
