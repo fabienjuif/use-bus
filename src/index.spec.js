@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import { renderHook } from '@testing-library/react-hooks'
-import useBus, { dispatch } from './index'
+import useBus, { dispatch, createBus } from './index'
 
 const prepare = (done) => (renderHookResult) => () => {
   renderHookResult.unmount()
@@ -176,4 +176,35 @@ it('should register a RegExp and call the callback', (done) => {
   expect(missCount).toEqual(1)
 
   done()
+})
+
+describe('multiple buses', () => {
+  const [useBusA, dispatchA] = createBus()
+  const [useBusB, dispatchB] = createBus();
+
+  it('should not cross publish', () => {
+    let aCount = 0;
+    let bCount = 0;
+
+    const { unmount: unmountA } = renderHook(() => useBusA('EVENT_TYPE', (evt) => {
+      aCount += 1;
+      expect(evt).toEqual({ type: 'EVENT_TYPE' })
+    }))
+
+    const { unmount: unmountB } = renderHook(() => useBusB('EVENT_TYPE', (evt) => {
+      bCount += 1;
+      expect(evt).toEqual({ type: 'EVENT_TYPE' })
+    }))
+
+    dispatchA('EVENT_TYPE')
+    expect(aCount).toEqual(1)
+    expect(bCount).toEqual(0)
+
+    dispatchB('EVENT_TYPE')
+    expect(aCount).toEqual(1)
+    expect(bCount).toEqual(1)
+
+    unmountA()
+    unmountB()
+  })
 })
